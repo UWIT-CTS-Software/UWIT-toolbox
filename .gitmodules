@@ -1,0 +1,6 @@
+[submodule "checkerboard"]
+	path = checkerboard
+	url = http://github.com/UWIT-CTS-Software/checkerboard.git
+[submodule "JackNet"]
+	path = JackNet
+	url = http://github.com/UWIT-CTS-Software/JackNet.git/
