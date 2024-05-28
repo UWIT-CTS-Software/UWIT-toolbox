@@ -1,4 +1,7 @@
-const { app, BrowserWindow } = require('electron/main')
+
+//const { app, BrowserWindow } = require('electron/main')
+import buildingData from './campus.json' with { type: "json" }
+//const buildingData = require('./campus.json')
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -9,6 +12,8 @@ const createWindow = () => {
   win.loadFile('html/index.html')
 }
 
-app.whenReady().then(() => {
-  createWindow()
-})
+// app.whenReady().then(() => {
+//   createWindow()
+// })
+
+export { buildingData }
