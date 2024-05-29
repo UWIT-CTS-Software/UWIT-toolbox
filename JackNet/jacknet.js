@@ -31,7 +31,7 @@ export function setJackNet() {
     let option = document.createElement('option');
     option.innerHTML = 'All Buildings';
     buildingSelect.appendChild(option);
-    // NOT GONNA WORK FOR LOOP - THIS WAS TO POPULATE DROPDOWN w/ JSON
+    // TO-DO: add zone options here
     let bl = getBuildingList();
     console.log(bl);
     for(var i in bl) {
@@ -49,9 +49,12 @@ export function setJackNet() {
         label
         legend
     */
+
+    // REDO: what flags for checkbox are neccessary?
+    //   - do we need value and name?
     let devSelect = document.createElement("fieldset");
     devSelect.classList.add('devSelect');
-    devSelect.innerHTML = '<legend>Choose Devices to Search For: </legend> \n <input type ="checkbox" id="procs" name="dev1" value="Processors" /> \n <label for="procs"> Processors </label><br> \n <input type ="checkbox" id="proj" name="dev2" value="Projectors" /> \n <label for="proj">Projectors</label><br> \n <input type ="checkbox" id="wys" name="dev3" value="Wyo Share" /> \n <label for="wys">Wyo Shares</label><br> \n <input type ="checkbox" id="tp" name="dev4" value="Touch Panels" /> \n <label for="tp">Touch Panels</label><br>\n';
+    devSelect.innerHTML = '<legend>Choose Devices to Search For: </legend> \n <input class="cbDev" type ="checkbox" id="procs" name="dev" value="Processors" /> \n <label for="procs"> Processors </label><br> \n <input class="cbDev" type="checkbox" id="proj" name="dev" value="Projectors" /> \n <label for="proj">Projectors</label><br> \n <input class="cbDev" type="checkbox" id="wys" name="dev" value="Wyo Share" /> \n <label for="wys">Wyo Shares</label><br> \n <input class="cbDev" type="checkbox" id="tp" name="dev" value="Touch Panels" /> \n <label for="tp">Touch Panels</label><br>\n';
 
     // log progress (use tag progress)
 
@@ -77,6 +80,7 @@ export function setJackNet() {
     return;
   };
 
+// - -- - -- - - - CONSOLE FUNCTIONS
 // Tied to 'Clear Console' button, clears the console
 export function clearConsole() {
     let consoleObj = document.querySelector('.innerConsole');
@@ -92,6 +96,7 @@ function updateConsole(text) {
     return;
 };
 
+// - - -- ----- - - CMAPUS.JSON GET INFO FUNCTIONS
 // Returns a list of buildings
 function getBuildingList() {
     let bl = [];
@@ -118,7 +123,20 @@ function getAbbrev(buildingName) {
         };
     };
 };
+// ---- ---- -- -- -  GET USER CONFIG FUNCTIONS
+// TO-DO: return list of checked devices
+function getSelectedDevices() {
+    let devices = document.getElementsByName('dev');
+    console.log(devices);
+    return devices;
+}
 
+// TO-DO: return the selected option in the dropdown menu for buildings/zones
+function getBuildingSelection() {
+    return;
+}
+
+// - - ---- -- - ---- PING FUNCTIONS
 //TO-DO: generate host names based on rooms/devices selected.
 function genHostnames(devices, buildingName) {
     ab = getAbbrev(buildingName);
@@ -134,6 +152,7 @@ function pingThis() {
     return;
 };
 
+// - ---- ----- - - - EXPORT FUNCTIONS
 // TODO: Export findings as csv
 function exportCsv() {
     return;
@@ -143,6 +162,7 @@ function exportCsv() {
 // runs the search and calls the above functions to do so.
 export function runSearch() {
     updateConsole("Teest");
+    updateConsole(getSelectedDevices());
     return;
 };
 

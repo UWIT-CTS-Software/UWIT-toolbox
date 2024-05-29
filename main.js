@@ -1,6 +1,6 @@
 
 //const { app, BrowserWindow } = require('electron/main')
-import buildingData from './campus.json' with { type: "json" }
+import buildingData from './JackNet/campus.json' with { type: "json" }
 //const buildingData = require('./campus.json')
 
 const createWindow = () => {
@@ -9,7 +9,7 @@ const createWindow = () => {
     height: 600
   })
 
-  win.loadFile('html/index.html')
+  win.loadFile('html-css/index.html')
 }
 
 // app.whenReady().then(() => {
