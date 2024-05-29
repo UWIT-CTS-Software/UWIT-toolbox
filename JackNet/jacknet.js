@@ -54,7 +54,7 @@ export function setJackNet() {
     //   - do we need value and name?
     let devSelect = document.createElement("fieldset");
     devSelect.classList.add('devSelect');
-    devSelect.innerHTML = '<legend>Choose Devices to Search For: </legend> \n <input class="cbDev" type ="checkbox" id="procs" name="dev" value="Processors" /> \n <label for="procs"> Processors </label><br> \n <input class="cbDev" type="checkbox" id="proj" name="dev" value="Projectors" /> \n <label for="proj">Projectors</label><br> \n <input class="cbDev" type="checkbox" id="wys" name="dev" value="Wyo Share" /> \n <label for="wys">Wyo Shares</label><br> \n <input class="cbDev" type="checkbox" id="tp" name="dev" value="Touch Panels" /> \n <label for="tp">Touch Panels</label><br>\n';
+    devSelect.innerHTML = '<legend>Choose Devices to Search For: </legend> \n <input type ="checkbox" id="procs" name="dev" value="PROC" /> \n <label for="procs"> Processors </label><br> \n <input type="checkbox" id="proj" name="dev" value="PROJ" /> \n <label for="proj">Projectors</label><br> \n <input type="checkbox" id="wys" name="dev" value="WS" /> \n <label for="wys">Wyo Shares</label><br> \n <input type="checkbox" id="tp" name="dev" value="TP" /> \n <label for="tp">Touch Panels</label><br>\n';
 
     // log progress (use tag progress)
 
@@ -89,10 +89,12 @@ export function clearConsole() {
 };
 
 // updates the console by appending an item of text to contents
+// TODO: Move the slider to make the last line visible
 function updateConsole(text) {
     let consoleObj = document.querySelector('.innerConsole');
     const beforeText = consoleObj.value.substring(0, consoleObj.value.length);
     consoleObj.value = beforeText + '\n' + text;
+    consoleObj.scrollTop = consoleObj.scrollHeight;
     return;
 };
 
@@ -123,32 +125,51 @@ function getAbbrev(buildingName) {
         };
     };
 };
+
 // ---- ---- -- -- -  GET USER CONFIG FUNCTIONS
 // TO-DO: return list of checked devices
 function getSelectedDevices() {
     let devices = document.getElementsByName('dev');
-    console.log(devices);
-    return devices;
+    let devList = [];
+    for (var i = 0; i < devices.length; ++i) {
+        if(devices[i].checked) {
+            devList.push(devices[i].value);
+        };
+    };
+    return devList;
 }
 
 // TO-DO: return the selected option in the dropdown menu for buildings/zones
 function getBuildingSelection() {
-    return;
+    let select = document.querySelector('.building_List');
+    return select.value;
 }
 
+// Super cool padding function i took of stackoverflow and i want to understand it
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+  }
+
 // - - ---- -- - ---- PING FUNCTIONS
-//TO-DO: generate host names based on rooms/devices selected.
 function genHostnames(devices, buildingName) {
-    ab = getAbbrev(buildingName);
-    rms = getRooms(buildingName);
-    hnList = [];
+    let ab = getAbbrev(buildingName);
+    let rms = getRooms(buildingName);
+    let hnList = [];
     // go through devices here and generate hostnames
     // ABBREVIATION-####-DEVICE#
+    for(var i = 0; i < rms.length; ++i) {
+        for(var j = 0; j < devices.length; ++j) {
+            hnList.push(ab + '-' + pad(rms[i], 4) + '-' + devices[j] + '1');
+        }
+    }
     return hnList;
 };
 
 // TODO: Ping
-function pingThis() {
+// will likely need to be asyncronous and need to timeout very fast
+function pingThis(hostname) {
     return;
 };
 
@@ -159,10 +180,55 @@ function exportCsv() {
 };
 
 // TODO: Main function
+// Needs to be asyncronyous
 // runs the search and calls the above functions to do so.
 export function runSearch() {
-    updateConsole("Teest");
-    updateConsole(getSelectedDevices());
+    updateConsole("====--------------------========--------------------====");
+    const devices = getSelectedDevices();
+    const building = getBuildingSelection();
+    let hostnames = []
+    let packBuild = false;
+    let totalNumDevices = 0;
+    updateConsole("Selected Devices: " + devices);
+    // When the time comes do something simular for zones
+    if (building == "All Buildings") {
+        packBuild = true;
+        let buildingList = getBuildingList();
+        updateConsole("Selected Buildings: " + buildingList);
+        // iterate through each building and create hostnames for each and ping
+        for(var i=0; i < buildingList.length; ++i) {
+            let newHosts = genHostnames(devices, buildingList[i])
+            totalNumDevices += newHosts.length;
+            hostnames.push(newHosts);
+        }
+        //updateConsole(hostnames);
+        //console.log(hostnames)
+    }
+    else {
+        updateConsole("Selected Building: " + building);
+        // generate hostnames
+        hostnames = genHostnames(devices, building);
+        totalNumDevices = hostnames.length;
+        //updateConsole(hostnames);
+    }
+    updateConsole("Searching for " + totalNumDevices + " devices.");
+    // build progress bar here ?
+
+    // Check if the pack of building flag is raised (all buildings/zone selection) and then ping every generated hostname
+    if(packBuild) {
+        for(var i = 0; i < hostnames.length; ++i) {
+            for(var j = 0; j < hostnames[i].length; ++j) {
+                //updateConsole(hostnames[i][j]);
+                pingThis(hostnames[i][j])
+            }
+        }
+    }
+    else {
+        for(var i = 0; i < hostnames.length; ++i) {
+            //updateConsole(hostnames[i]);
+            pingThis(hostnames[i]);
+        }
+    }
     return;
 };
 
