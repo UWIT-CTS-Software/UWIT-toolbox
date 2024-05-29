@@ -37,9 +37,13 @@ p {
 /* checkerboard Defifnitions */
 
 .cb_container {
+    /* display: flex; */
+    /* height: 300px; */
+    flex-flow: column wrap;
     border: 1px solid rgb(236, 200, 101);
     background-color: blanchedalmond;
     margin: 4px 2px;
+    align-content: flex-start;
 }
 
 .cb_header {
@@ -55,7 +59,9 @@ p {
     text-align: left;
     color: rgb(36, 35, 35);
     padding: 0px 0px;
-    font-family:'Courier New', Courier, monospace
+    font-family:'Courier New', Courier, monospace;
+    width: 20%;
+    margin: auto;
 }
 
 /* CamCode Defifnitions */
