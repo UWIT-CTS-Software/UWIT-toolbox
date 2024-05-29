@@ -13,6 +13,18 @@ p {
     font-family:'Courier New', Courier, monospace
 }
 
+label {
+    color: rgb(236, 200, 101);
+    text-align: center;
+    font-family:'Courier New', Courier, monospace
+}
+
+legend {
+    color: rgb(236, 200, 101);
+    text-align: left;
+    font-family:'Courier New', Courier, monospace
+}
+
 .button {
     border: none;
     color: white;
