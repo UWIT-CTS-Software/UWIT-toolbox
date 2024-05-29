@@ -1,2 +1,2 @@
 # UWIT-toolbox
-A suite of apps for UWIT CTS technicians
+A suite of apps for UWIT CTS technicians.
